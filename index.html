@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script>
+        let ids = ["123", "23", "kmd"]
+
+        async function get(id) {
+            let data = await $.get("/data/" + id);
+            return_data = {time: [], temp: []}
+            for (let k of data) {
+                return_data.time.push(new Date(k.time))
+                return_data.temp.push(k.temp)
+            }
+            return return_data
+        }
+//グラフ書く
+        function graph(data) {
+            let dataset = []
+            for (let d of data) {
+                dataset.push({
+                    type: 'line',
+                    x: d.time,
+                    xaxis: 'x',
+                    y: d.temp
+                })
+            }
+
+            var layout = {
+                xaxis: {'domain': [0, 1]},
+            };
+
+            Plotly.newPlot('div1', dataset, layout);
+        }
+//アクセスしたら
+        window.onload = async () => {
+          let data = []
+          for(let id of ids){
+            data.push(await get(id))
+          }
+          graph(data)
+        }
+    </script>
+</head>
+<body>
+<div id="div1"></div>
+<div id="div2"></div>
+</body>
+</html>
