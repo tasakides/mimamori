@@ -29,6 +29,7 @@ app.get('/data/:id', async function (req, res) {
     res.send(data);
 });
 app.post("/data", async function (req, res) {
+    console.log(req.body)
     if (!("temp" in req.body) || !("id" in req.body)) {
         res.send('ダメです');
         return
@@ -37,4 +38,4 @@ app.post("/data", async function (req, res) {
     database.collection("data").insertOne({"temp": req.body.temp, "id": req.body.id, "time": Date.now()})
     res.send('OK');
 })
-app.listen(3000);
+app.listen(80);
