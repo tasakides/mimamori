@@ -8,6 +8,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>AdminLTE 2 | Starter</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+          integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="/adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -35,14 +37,48 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="js/graph.js"></script>
     <script>
-        function draw_graph(){
-            let graph1 = new Graph("graph1","temp")
-            graph1.draw_id([1])
-            let graph2 = new Graph("graph2","humi")
-            graph2.draw_id([1])
+        function get_data_from_table() {
+            let data = []
+            Array.prototype.forEach.call(document.querySelectorAll("table#target>tbody>tr"), (e) => {
+                if (e.classList.contains("hide"))
+                    return;
+                if (e.classList.contains("add_row"))
+                    return;
+
+                let row = []
+                Array.prototype.forEach.call(e.querySelectorAll("td>input"), (txt) => {
+                    row.push(txt.value)
+                })
+                data.push(row)
+            })
+            return data
         }
+
+        function tenchi(data) {
+            let id = []
+            let label = []
+            data.forEach((value, key) => {
+                id.push(value[1])
+                label.push(value[0])
+            })
+            return {id, label}
+        }
+    </script>
+    <script>
+        function draw_graph() {
+            let data = get_data_from_table()
+            let {id} = tenchi(data)
+            let graph1 = new Graph("graph1", "temp")
+            graph1.draw_id(id)
+            let graph2 = new Graph("graph2", "humi")
+            graph2.draw_id(id)
+            $('#setting_sensor_id').modal('hide');
+        }
+
         window.onload = () => {
-            draw_graph()
+            // draw_graph()
+            $('#setting_sensor_id').modal();
+            document.querySelector('#params .add_row').click()
         }
     </script>
 </head>
@@ -307,6 +343,9 @@ desired effect
             </ol>
         </section>
 
+        <section class="content container-fluid">
+            <button class="btn btn-github" onclick="$('#setting_sensor_id').modal();">idを入力する</button>
+        </section>
         <!-- Main content -->
         <section class="content container-fluid">
 
@@ -410,6 +449,49 @@ desired effect
     <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+
+<div class="modal fade" id="setting_sensor_id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="target" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="row">表示名</th>
+                        <th>ID</th>
+                        <th>delete</th>
+                    </tr>
+                    </thead>
+                    <tbody id="params">
+
+                    <tr class="add_row"
+                        onclick="let node=this.nextElementSibling.cloneNode(true);node.removeAttribute('id');node.classList.remove('hide');this.parentNode.insertBefore(node,this)">
+                        <td colspan="3" style="text-align: center"><i class="fas fa-plus"></i></td>
+                    </tr>
+
+                    <!--template-->
+                    <tr class="hide">
+                        <td><input style="width: 100%;outline: 0;border: 0px;background: transparent;"></td>
+                        <td><input style="width: 100%;outline: 0;border: 0px;background: transparent;"></td>
+                        <td onclick="this.parentNode.outerHTML = ''"><i class="fas fa-ban"></i></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="draw_graph()">Draw graph</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- REQUIRED JS SCRIPTS -->
 
