@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AdminLTE 2 | Log in</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.4 -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+          integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="/adminlte/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/adminlte/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/adminlte/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/adminlte/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+          page. However, you can choose any other skin. Make sure you
+          apply the skin class to the body tag so the changes take effect. -->
+    <link rel="stylesheet" href="/adminlte/dist/css/skins/skin-blue.min.css">
+    <!-- jQuery 3 -->
+    <script src="/adminlte/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/adminlte/dist/js/adminlte.min.js"></script>
+    <script>
+        $(function () {
+            $("#submit").click(async function () {
+                console.log("click")
+                let user = $("#user").val()
+                let pass = $("#pass").val()
+                console.log(user,pass)
+                let data = await (await fetch("/login", {
+                    method: "POST", // *GET, POST, PUT, DELETE, etc.
+                    // mode: "cors", // no-cors, cors, *same-origin
+                    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                    credentials: "same-origin", // include, same-origin, *omit
+                    headers: {
+                        //"Content-Type": "application/json; charset=utf-8",
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    redirect: "follow", // manual, *follow, error
+                    referrer: "no-referrer", // no-referrer, *client
+                    body: 'user=' + user + "&pass=" + pass
+                })).text()
+                console.log(data)
+                if(data=="Success"){
+                    window.location.href="/main"
+                }
+                else{
+                    alert("user名もしくはpassが異なります")
+                }
+            })
+        })
+    </script>
+</head>
+<body class="login-page">
+<div class="login-box">
+
+    <div class="login-logo">
+        <a href="">管理画面</a>
+    </div><!-- /.login-logo -->
+
+    <div class="login-box-body">
+        <p class="login-box-msg">ログインして下さい。</p>
+
+        <div action="" method="post">
+
+            <!-- メール -->
+            <div class="form-group has-feedback">
+                <input type="user" id="user" class="form-control" placeholder="Username"/>
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
+
+            <!-- パスワード -->
+            <div class="form-group has-feedback">
+                <input type="password" id="pass" class="form-control" placeholder="Password"/>
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+
+            <!-- ボタン グリッドでセンタリング-->
+            <div class="row">
+                <div class="col-xs-4">
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="submit" id="submit" class="btn btn-primary btn-block btn-flat" onclick="">ログイン
+                    </button>
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                </div><!-- /.col -->
+            </div>
+
+        </div>
+
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+
+</body>
+</html>
