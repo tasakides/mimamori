@@ -22,6 +22,9 @@ app.use(bodyParser.urlencoded({
 //admin_lte関連の奴
 app.use('/adminlte', express.static(__dirname + '/node_modules/admin-lte'));
 
+//jsの
+app.use('/js', express.static(__dirname + '/js'));
+
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
     res.sendfile(__dirname + "/index2.html");
