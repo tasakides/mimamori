@@ -18,9 +18,13 @@ const app = express();
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+//admin_lte関連の奴
+app.use('/adminlte', express.static(__dirname + '/node_modules/admin-lte'));
+
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
-    res.sendfile(__dirname + "/index.html");
+    res.sendfile(__dirname + "/index2.html");
 });
 
 app.get('/data/:id', async function (req, res) {

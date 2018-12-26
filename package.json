@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"forever -w app.js"
+    "start": "forever -w app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "admin-lte": "^2.4.8",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "mongoose": "^5.3.14"
