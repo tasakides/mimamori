@@ -38,4 +38,4 @@ app.post("/data", async function (req, res) {
     database.collection("data").insertOne({"temp": req.body.temp, "id": req.body.id, "time": Date.now()})
     res.send('OK');
 })
-app.listen(80);
+app.listen(3000);
