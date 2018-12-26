@@ -65,20 +65,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
     </script>
     <script>
-        function draw_graph() {
-            let data = get_data_from_table()
-            let {id} = tenchi(data)
+        async function draw_graph() {
+            // let data = get_data_from_table()
+            // let {id} = tenchi(data)
+            // let id = ["3FFC0A","40516B","40516F","4051C4","404FD8"]
+            let data = await (await fetch("/sessionok", {
+                method: "GET", // *GET, POST, PUT, DELETE, etc.
+                // mode: "cors", // no-cors, cors, *same-origin
+                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: "same-origin", // include, same-origin, *omit
+                headers: {
+                    //"Content-Type": "application/json; charset=utf-8",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                redirect: "follow", // manual, *follow, error
+                referrer: "no-referrer", // no-referrer, *client
+            })).text()
+            console.log(data)
+            if (data == "Reject") {
+                window.location.href = "/"
+            }
+            let id = JSON.parse(data)
             let graph1 = new Graph("graph1", "temp")
             graph1.draw_id(id)
             let graph2 = new Graph("graph2", "humi")
             graph2.draw_id(id)
-            $('#setting_sensor_id').modal('hide');
+            // $('#setting_sensor_id').modal('hide');
         }
 
         window.onload = () => {
-            // draw_graph()
-            $('#setting_sensor_id').modal();
-            document.querySelector('#params .add_row').click()
+            draw_graph()
+            // $('#setting_sensor_id').modal();
+            // document.querySelector('#params .add_row').click()
         }
     </script>
 </head>

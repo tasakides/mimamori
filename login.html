@@ -43,9 +43,15 @@
                     },
                     redirect: "follow", // manual, *follow, error
                     referrer: "no-referrer", // no-referrer, *client
-                    body: 'user='+user+"&pass="+pass
+                    body: 'user=' + user + "&pass=" + pass
                 })).text()
                 console.log(data)
+                if(data=="Success"){
+                    window.location.href="/main"
+                }
+                else{
+                    alert("user名もしくはpassが異なります")
+                }
             })
         })
     </script>

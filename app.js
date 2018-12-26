@@ -56,12 +56,21 @@ app.post("/login", async function (req, res) {
         res.send('Reject');
         return
     }
-    req.session.user=req.body.user
-    req.session.sensors=data.sensors
+    req.session.user = req.body.user
+    req.session.sensors = data.sensors
     console.log(req.session)
     res.send('Success')
-})
 
+})
+app.get('/sessionok', function (req, res) {
+    console.log(req.session)
+    if (!("user" in req.session)) {
+        res.send('Reject');
+        return
+    }
+    res.send(req.session.sensors);
+
+});
 app.get('/main', function (req, res) {
     res.sendfile(__dirname + "/index2.html");
 });
