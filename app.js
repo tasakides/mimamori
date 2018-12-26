@@ -32,6 +32,19 @@ app.use(bodyParser.json());
 app.get('/', function (req, res) {
     res.sendfile(__dirname + "/login.html");
 });
+app.post("/login", async function (req, res) {
+    if (!("user" in req.body) || !("pass" in req.body)) {
+        res.send('Reject');
+        return
+    }
+    let data = (await database.collection("user").find({"user": req.body.user}).toArray())[0]
+    if (data.pass != req.body.pass) {
+        res.send('Reject');
+        return
+    }
+    res.send('Success')
+})
+
 app.get('/main', function (req, res) {
     res.sendfile(__dirname + "/index2.html");
 });
