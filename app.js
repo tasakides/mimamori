@@ -15,6 +15,19 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
+var session = require('express-session');
+
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: false,
+        secure: false,
+        maxage: 1000 * 60 * 30
+    }
+}));
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -43,6 +56,9 @@ app.post("/login", async function (req, res) {
         res.send('Reject');
         return
     }
+    req.session.user=req.body.user
+    req.session.sensors=data.sensors
+    console.log(req.session)
     res.send('Success')
 })
 
