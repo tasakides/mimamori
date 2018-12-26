@@ -41,8 +41,9 @@ app.post("/data", async function (req, res) {
         res.send('ダメです');
         return
     }
-
-    database.collection("data").insertOne({"temp": req.body.temp, "id": req.body.id, "time": Date.now()})
+    let data = req.body;
+    data.time = Date.now()
+    database.collection("data").insertOne(data)
     res.send('OK');
 })
 app.listen(3000);

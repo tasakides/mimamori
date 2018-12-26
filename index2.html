@@ -35,9 +35,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="js/graph.js"></script>
     <script>
+        function draw_graph(){
+            let graph1 = new Graph("graph1","temp")
+            graph1.draw_id([1])
+            let graph2 = new Graph("graph2","humi")
+            graph2.draw_id([1])
+        }
         window.onload = () => {
-            let graph = new Graph("graph1")
-            graph.draw_id([1])
+            draw_graph()
         }
     </script>
 </head>
@@ -306,6 +311,11 @@ desired effect
         <section class="content container-fluid">
 
             <div class="row" id="graph1"></div>
+
+        </section>
+        <section class="content container-fluid">
+
+            <div class="row" id="graph2"></div>
 
         </section>
         <!-- /.content -->

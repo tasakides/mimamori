@@ -1,15 +1,16 @@
 class Graph {
-    constructor(div) {
+    constructor(div, graph_type) {
         this.div = div
+        this.type = graph_type
     }
 
     //データを持ってくる
     async get(id) {
         let data = await $.get("/data/" + id);
-        let return_data = {time: [], temp: []}
+        let return_data = {time: [], data: []}
         for (let k of data) {
             return_data.time.push(new Date(k.time))
-            return_data.temp.push(k.temp)
+            return_data.data.push(k[this.type])
         }
         return return_data
     }
@@ -22,7 +23,7 @@ class Graph {
                 type: 'line',
                 x: d.time,
                 xaxis: 'x',
-                y: d.temp
+                y: d.data
             })
         }
 
