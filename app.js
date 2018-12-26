@@ -22,14 +22,19 @@ app.use(bodyParser.urlencoded({
 //admin_lte関連の奴
 app.use('/adminlte', express.static(__dirname + '/node_modules/admin-lte'));
 
+//nodemodule転送
+app.use('/node_modules', express.static(__dirname + '/node_modules'));
+
 //jsの
 app.use('/js', express.static(__dirname + '/js'));
 
 app.use(bodyParser.json());
 app.get('/', function (req, res) {
+    res.sendfile(__dirname + "/login.html");
+});
+app.get('/main', function (req, res) {
     res.sendfile(__dirname + "/index2.html");
 });
-
 app.get('/data/:id', async function (req, res) {
     let id = req.params.id
     let data = await database.collection("data").find({"id": id}).toArray()
@@ -46,4 +51,4 @@ app.post("/data", async function (req, res) {
     database.collection("data").insertOne(data)
     res.send('OK');
 })
-app.listen(3000);
+app.listen(80);
