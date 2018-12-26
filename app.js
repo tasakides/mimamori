@@ -33,6 +33,7 @@ app.get('/', function (req, res) {
     res.sendfile(__dirname + "/login.html");
 });
 app.post("/login", async function (req, res) {
+    console.log(req.body)
     if (!("user" in req.body) || !("pass" in req.body)) {
         res.send('Reject');
         return

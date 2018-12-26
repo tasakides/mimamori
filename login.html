@@ -19,6 +19,36 @@
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
     <link rel="stylesheet" href="/adminlte/dist/css/skins/skin-blue.min.css">
+    <!-- jQuery 3 -->
+    <script src="/adminlte/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script src="/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/adminlte/dist/js/adminlte.min.js"></script>
+    <script>
+        $(function () {
+            $("#submit").click(async function () {
+                console.log("click")
+                let user = $("#user").val()
+                let pass = $("#pass").val()
+                console.log(user,pass)
+                let data = await (await fetch("/login", {
+                    method: "POST", // *GET, POST, PUT, DELETE, etc.
+                    // mode: "cors", // no-cors, cors, *same-origin
+                    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                    credentials: "same-origin", // include, same-origin, *omit
+                    headers: {
+                        //"Content-Type": "application/json; charset=utf-8",
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    redirect: "follow", // manual, *follow, error
+                    referrer: "no-referrer", // no-referrer, *client
+                    body: 'user='+user+"&pass="+pass
+                })).text()
+                console.log(data)
+            })
+        })
+    </script>
 </head>
 <body class="login-page">
 <div class="login-box">
@@ -30,17 +60,17 @@
     <div class="login-box-body">
         <p class="login-box-msg">ログインして下さい。</p>
 
-        <form action="" method="post">
+        <div action="" method="post">
 
             <!-- メール -->
             <div class="form-group has-feedback">
-                <input type="email" class="form-control" placeholder="Email" />
+                <input type="user" id="user" class="form-control" placeholder="Username"/>
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
 
             <!-- パスワード -->
             <div class="form-group has-feedback">
-                <input type="password" class="form-control" placeholder="Password" />
+                <input type="password" id="pass" class="form-control" placeholder="Password"/>
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
 
@@ -49,22 +79,17 @@
                 <div class="col-xs-4">
                 </div><!-- /.col -->
                 <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">ログイン</button>
+                    <button type="submit" id="submit" class="btn btn-primary btn-block btn-flat" onclick="">ログイン
+                    </button>
                 </div><!-- /.col -->
                 <div class="col-xs-4">
                 </div><!-- /.col -->
             </div>
 
-        </form>
+        </div>
 
     </div><!-- /.login-box-body -->
 </div><!-- /.login-box -->
 
-<!-- jQuery 3 -->
-<script src="/adminlte/bower_components/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="/adminlte/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- AdminLTE App -->
-<script src="/adminlte/dist/js/adminlte.min.js"></script>
 </body>
 </html>
