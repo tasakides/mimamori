@@ -65,10 +65,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
     </script>
     <script>
-        async function draw_graph() {
-            // let data = get_data_from_table()
-            // let {id} = tenchi(data)
-            // let id = ["3FFC0A","40516B","40516F","4051C4","404FD8"]
+        let ids = null;
+
+        async function sessioncheck() {
             let data = await (await fetch("/sessionok", {
                 method: "GET", // *GET, POST, PUT, DELETE, etc.
                 // mode: "cors", // no-cors, cors, *same-origin
@@ -84,14 +83,49 @@ scratch. This page gets rid of all links and provides the needed markup only.
             console.log(data)
             if (data == "Reject") {
                 window.location.href = "/"
+                return null
             }
             let id = JSON.parse(data)
+            return id;
+        }
+
+        async function draw_graph() {
+            // let data = get_data_from_table()
+            // let {id} = tenchi(data)
+            // let id = ["3FFC0A","40516B","40516F","4051C4","404FD8"]
+            let id = await sessioncheck()
+            console.log(id)
             let graph1 = new Graph("graph1", "temp")
             graph1.draw_id(id)
             let graph2 = new Graph("graph2", "humi")
             graph2.draw_id(id)
             // $('#setting_sensor_id').modal('hide');
         }
+
+        async function get(id) {
+            let data = await $.get("/data/" + id);
+            let return_data = {time: [], data: []}
+            for (let k of data) {
+                return_data.time.push(new Date(k.time))
+                return_data.data.push(k["temp"] - 0)
+            }
+            return return_data
+        }
+
+        setInterval(async function () {
+            let message = ""
+            let ids = await sessioncheck()
+            for (let id of ids) {
+                console.log(id)
+                let {data} = await get(id)
+                console.log(data)
+                if (data == null || data.length == 0)
+                    break
+                let last_temp = data[data.length - 1]
+                message += "id" + id + "の温度は" + last_temp + "度です。"
+            }
+            $("#temp").text(message)
+        }, 1000)
 
         window.onload = () => {
             draw_graph()
@@ -362,7 +396,7 @@ desired effect
         </section>
 
         <!--<section class="content container-fluid">-->
-            <!--<button class="btn btn-github" onclick="$('#setting_sensor_id').modal();">idを入力する</button>-->
+        <!--<button class="btn btn-github" onclick="$('#setting_sensor_id').modal();">idを入力する</button>-->
         <!--</section>-->
         <!-- Main content -->
         <section class="content container-fluid">
@@ -373,6 +407,11 @@ desired effect
         <section class="content container-fluid">
 
             <div class="row" id="graph2"></div>
+
+        </section>
+        <section class="content container-fluid">
+
+            <div class="row" id="temp"></div>
 
         </section>
         <!-- /.content -->
