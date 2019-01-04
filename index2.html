@@ -122,7 +122,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 if (data == null || data.length == 0)
                     break
                 let last_temp = data[data.length - 1]
-                message += "id" + id + "の温度は" + last_temp + "度です。"
+                if(id == "40516F") {
+                    //message += "id" + id + "の温度は" + last_temp + "度です。"
+                    message +=last_temp + "度"
+                }
             }
             $("#temp").text(message)
         }, 1000)
@@ -409,9 +412,22 @@ desired effect
             <div class="row" id="graph2"></div>
 
         </section>
-        <section class="content container-fluid">
+        <section class="content">
 
-            <div class="row" id="temp"></div>
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3 id="temp"></h3>
+
+                        <p>リビングの温度</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-stats-bars"></i>
+                    </div>
+                    <!--<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
+                </div>
+            </div>
 
         </section>
         <!-- /.content -->
