@@ -122,12 +122,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 if (data == null || data.length == 0)
                     break
                 let last_temp = data[data.length - 1]
-                if(id == "40516F") {
+                if (id == "40516F") {
                     //message += "id" + id + "の温度は" + last_temp + "度です。"
-                    message +=last_temp + "度"
+                    message += last_temp + "度"
                 }
             }
             $("#temp").text(message)
+        }, 1000)
+
+        //グラフ自動更新
+        setInterval(async function () {
+            draw_graph()
         }, 1000)
 
         window.onload = () => {
