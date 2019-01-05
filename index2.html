@@ -128,7 +128,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         setInterval(async function () {
             let ids = await sessioncheck()
             let data = await get_all(ids)
-            console.log(data)
             let diff = ""
             for (let id1 in data) {
                 for (let id2 in data) {
@@ -140,7 +139,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 }
             }
             console.log(diff)
-        })
+        },1000)
 
         setInterval(async function () {
             let message = ""
