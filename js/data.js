@@ -36,7 +36,7 @@ class Data {
             let message = last_temp + "度"
             t += this.template_for_temp
                 .replace("{{temp_temp}}", message)
-                .replace("{{temp_place}}", "場所")
+                .replace("{{temp_place}}", id)
         }
         $("#temp_table")[0].innerHTML = t
     }
