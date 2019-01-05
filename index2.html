@@ -124,6 +124,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
             return d
         }
 
+        function abs(val) {
+            return val < 0 ? -val : val;
+        };
         //温度計算
         setInterval(async function () {
             let ids = await sessioncheck()
@@ -134,12 +137,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     if (id1 == id2)
                         break
                     diff += id1 + "と" + id2 + "の温度差は"
-                        + (data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
+                        + abs(data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
                         + "度です。\n"
                 }
             }
             console.log(diff)
-        },1000)
+        }, 1000)
 
         setInterval(async function () {
             let message = ""
