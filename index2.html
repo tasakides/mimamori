@@ -124,23 +124,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
             return d
         }
 
+        function abs(val) {
+            return val < 0 ? -val : val;
+        };
+
+        function calc_temp(id1, id2, data) {
+            return abs(data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
+        }
+
         //温度計算
         setInterval(async function () {
             let ids = await sessioncheck()
             let data = await get_all(ids)
-            console.log(data)
-            let diff = ""
+            let diff_temp = {}
+
             for (let id1 in data) {
+                diff_temp[id1] = {}
                 for (let id2 in data) {
-                    if (id1 == id2)
-                        break
-                    diff += id1 + "と" + id2 + "の温度差は"
-                        + (data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
-                        + "度です。\n"
+                    diff_temp[id1][id2] = abs(data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
                 }
             }
-            console.log(diff)
-        })
+            console.log(diff_temp)
+        }, 1000)
 
         setInterval(async function () {
             let message = ""
