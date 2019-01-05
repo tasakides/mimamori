@@ -112,6 +112,36 @@ scratch. This page gets rid of all links and provides the needed markup only.
             return return_data
         }
 
+        //idを入力すると全部のデータをとってくる関数
+        async function get_all(ids) {
+            let d = {}
+            for (let id of ids) {
+                let {time, data} = await get(id)
+                if (data == null || data.length == 0 || time == null || time.length == 0)
+                    break
+                d[id] = {time, data}
+            }
+            return d
+        }
+
+        //温度計算
+        setInterval(async function () {
+            let ids = await sessioncheck()
+            let data = await get_all(ids)
+            console.log(data)
+            let diff = ""
+            for (let id1 in data) {
+                for (let id2 in data) {
+                    if (id1 == id2)
+                        break
+                    diff += id1 + "と" + id2 + "の温度差は"
+                        + (data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
+                        + "度です。\n"
+                }
+            }
+            console.log(diff)
+        })
+
         setInterval(async function () {
             let message = ""
             let ids = await sessioncheck()
