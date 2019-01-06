@@ -95,6 +95,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
             // document.querySelector('#params .add_row').click()
         }
     </script>
+    <style type="text/css">
+        .content {
+            min-height: auto
+        }
+
+        div {
+            word-wrap: break-word
+        }
+    </style>
 </head>
 <!--
 BODY TAG OPTIONS:
@@ -361,6 +370,14 @@ desired effect
         <!--<button class="btn btn-github" onclick="$('#setting_sensor_id').modal();">idを入力する</button>-->
         <!--</section>-->
         <!-- Main content -->
+        <section class="content">
+
+            <div class="row" id="mess_table">
+                <div></div>
+                <div></div>
+            </div>
+
+        </section>
         <section class="content">
 
             <div class="row" id="temp_table"></div>

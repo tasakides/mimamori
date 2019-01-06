@@ -5,16 +5,38 @@ class Data {
         this.template_for_temp = `
             <div class="col-lg-3 col-xs-6">
                 <!-- small box -->
-                <div class="small-box bg-green">
+                <div class="small-box bg-orange">
                     <div class="inner">
                         <h3>{{temp_temp}}</h3>
 
                         <p>{{temp_place}}</p>
                     </div>
                     <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
+                        <i class="ion ion-thermometer"></i>
                     </div>
                     <!--<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
+                </div>
+            </div>`;
+        this.template_for_mess = `
+            <div class="col-lg-12 col-xs-12">
+                <!-- small box -->
+                <div class="info-box">
+                    <span class="info-box-icon bg-red"><i class="ion ion-alert-circled"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text"><h4>{{mess_mess}}</h4></span>
+                    </div>
+            <!-- /.info-box-content -->
+                </div>
+            </div>`;
+        this.template_for_mess2 = `
+            <div class="col-lg-12 col-xs-12">
+                <!-- small box -->
+                <div class="info-box">
+                    <span class="info-box-icon bg-aqua"><i class="ion ion-alert-circled"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text"><h4>{{mess_mess}}</h4></span>
+                    </div>
+            <!-- /.info-box-content -->
                 </div>
             </div>`;
         let self = this;
@@ -27,7 +49,10 @@ class Data {
 
     async get_temp() {
         let t = ""
+        let s = ""
         let ids = await this.sessioncheck()
+        let d = 0
+        let message = ""
         for (let id of ids) {
             let {data} = await this.get(id)
             if (data == null || data.length == 0)
@@ -37,21 +62,41 @@ class Data {
             t += this.template_for_temp
                 .replace("{{temp_temp}}", message)
                 .replace("{{temp_place}}", id)
+            if (last_temp > 30)
+                d = 1
         }
         $("#temp_table")[0].innerHTML = t
+        if (d == 1) {
+            message = "高温の部屋があります。熱中症に気をつけてください。"
+            $("#mess_table>div")[0].innerHTML = this.template_for_mess
+                .replace("{{mess_mess}}", message)
+        } else
+            $("#mess_table>div")[0].innerHTML = ""
+
     }
 
     async calc_difftemp() {
         let data = await this.get_all()
+        let message = ""
+        let dd = 0
         this.diff_temp = {}
 
         for (let id1 in data) {
             this.diff_temp[id1] = {}
             for (let id2 in data) {
-                this.diff_temp[id1][id2] = this.abs(data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
+                let d = this.diff_temp[id1][id2] = this.abs(data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
+                if ((d > 10 && data[id1].data[data[id1].data.length - 1] < 10) || (d > 10 && data[id2].data[data[id2].data.length - 1] < 10))
+                    dd = 1
             }
         }
-        // console.log(this.diff_temp)
+        if (dd == 1) {
+            message = "温度差が激しい場所があります。寒くなっているのでヒートショックに気をつけてください。"
+            $("#mess_table>div")[1].innerHTML = this.template_for_mess2
+                .replace("{{mess_mess}}", message)
+        } else
+            $("#mess_table>div")[1].innerHTML = ""
+
+        // console.log(his.diff_temp)
     }
 
     async sessioncheck() {
