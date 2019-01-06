@@ -76,16 +76,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
             let id = await data.sessioncheck()
             // console.log(id)
             let graph1 = new Graph("graph1", "temp")
-            graph1.draw_id(id)
             let graph2 = new Graph("graph2", "humi")
-            graph2.draw_id(id)
             // $('#setting_sensor_id').modal('hide');
         }
 
-
         //グラフ自動更新
         setInterval(async function () {
-            draw_graph()
+            // draw_graph()
         }, 1000)
         let data = null
         window.onload = () => {
