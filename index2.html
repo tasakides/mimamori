@@ -36,6 +36,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="js/graph.js"></script>
+    <script src="js/data.js"></script>
     <script>
         function get_data_from_table() {
             let data = []
@@ -67,34 +68,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script>
         let ids = null;
 
-        async function sessioncheck() {
-            let data = await (await fetch("/sessionok", {
-                method: "GET", // *GET, POST, PUT, DELETE, etc.
-                // mode: "cors", // no-cors, cors, *same-origin
-                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: "same-origin", // include, same-origin, *omit
-                headers: {
-                    //"Content-Type": "application/json; charset=utf-8",
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                redirect: "follow", // manual, *follow, error
-                referrer: "no-referrer", // no-referrer, *client
-            })).text()
-            console.log(data)
-            if (data == "Reject") {
-                window.location.href = "/"
-                return null
-            }
-            let id = JSON.parse(data)
-            return id;
-        }
 
         async function draw_graph() {
             // let data = get_data_from_table()
             // let {id} = tenchi(data)
             // let id = ["3FFC0A","40516B","40516F","4051C4","404FD8"]
-            let id = await sessioncheck()
-            console.log(id)
+            let id = await data.sessioncheck()
+            // console.log(id)
             let graph1 = new Graph("graph1", "temp")
             graph1.draw_id(id)
             let graph2 = new Graph("graph2", "humi")
@@ -102,40 +82,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             // $('#setting_sensor_id').modal('hide');
         }
 
-        async function get(id) {
-            let data = await $.get("/data/" + id);
-            let return_data = {time: [], data: []}
-            for (let k of data) {
-                return_data.time.push(new Date(k.time))
-                return_data.data.push(k["temp"] - 0)
-            }
-            return return_data
-        }
-
-        setInterval(async function () {
-            let message = ""
-            let ids = await sessioncheck()
-            for (let id of ids) {
-                console.log(id)
-                let {data} = await get(id)
-                console.log(data)
-                if (data == null || data.length == 0)
-                    break
-                let last_temp = data[data.length - 1]
-                if (id == "40516F") {
-                    //message += "id" + id + "の温度は" + last_temp + "度です。"
-                    message += last_temp + "度"
-                }
-            }
-            $("#temp").text(message)
-        }, 1000)
 
         //グラフ自動更新
         setInterval(async function () {
             draw_graph()
         }, 1000)
-
+        let data = null
         window.onload = () => {
+            data = new Data()
             draw_graph()
             // $('#setting_sensor_id').modal();
             // document.querySelector('#params .add_row').click()
@@ -409,20 +363,7 @@ desired effect
         <!-- Main content -->
         <section class="content">
 
-            <div class="col-lg-3 col-xs-6">
-                <!-- small box -->
-                <div class="small-box bg-green">
-                    <div class="inner">
-                        <h3 id="temp"></h3>
-
-                        <p>リビングの温度</p>
-                    </div>
-                    <div class="icon">
-                        <i class="ion ion-stats-bars"></i>
-                    </div>
-                    <!--<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>-->
-                </div>
-            </div>
+            <div class="row" id="temp_table"></div>
 
         </section>
         <section class="content container-fluid">
