@@ -28,7 +28,7 @@ class Graph {
         }
 
         let layout = {
-            xaxis: {'domain': [0, 1]},
+            xaxis: {'domain': [0, 1],autorange: true},
         };
 
         Plotly.newPlot(this.div, dataset, layout);
