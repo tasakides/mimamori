@@ -79,21 +79,30 @@ class Data {
         let data = await this.get_all()
         let message = ""
         let dd = 0
+        let ddd = 0
         this.diff_temp = {}
 
         for (let id1 in data) {
             this.diff_temp[id1] = {}
             for (let id2 in data) {
                 let d = this.diff_temp[id1][id2] = this.abs(data[id1].data[data[id1].data.length - 1] - data[id2].data[data[id2].data.length - 1])
-                if ((d > 10 && data[id1].data[data[id1].data.length - 1] < 10) || (d > 10 && data[id2].data[data[id2].data.length - 1] < 10))
+                if(data[id1].data[data[id1].data.length - 1] < 10)
                     dd = 1
+                if ((d > 10 && data[id1].data[data[id1].data.length - 1] < 10) || (d > 10 && data[id2].data[data[id2].data.length - 1] < 10))
+                    ddd = 1
             }
         }
         if (dd == 1) {
-            message = "温度差が激しい場所があります。寒くなっているのでヒートショックに気をつけてください。"
+            message = "寒くなっています。"
             $("#mess_table>div")[1].innerHTML = this.template_for_mess2
                 .replace("{{mess_mess}}", message)
-        } else
+            if(ddd == 1) {
+                message = "寒くなっています。温度差が激しい場所がありますのでヒートショックに気をつけてください。"
+                $("#mess_table>div")[1].innerHTML = this.template_for_mess2
+                    .replace("{{mess_mess}}", message)
+            }
+        }
+        else
             $("#mess_table>div")[1].innerHTML = ""
 
         // console.log(his.diff_temp)
